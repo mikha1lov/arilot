@@ -11,8 +11,7 @@ from utils import BitcoinNode, DatabaseConnection
 
 class BitcoinNodeSyncChecker(object):
     def __init__(self):
-        self.logger = logging.getLogger('checker_logger')
-        self.logger.setLevel(logging.INFO)
+        self.logger = self._get_logger()
 
         self.bitcoin_node = BitcoinNode()
         self.database_connection = DatabaseConnection()
@@ -21,11 +20,21 @@ class BitcoinNodeSyncChecker(object):
             self.logger.error('No connection with database')
             sys.exit(1)
 
+    def _get_logger(self):
+        logger = logging.getLogger(__name__)
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+        handler.setLevel(logging.INFO)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+        return logger
+
     def get_latest_block_info(self):
         response = requests.get('https://blockchain.info/latestblock')
         if response.status_code != 200:
             self.logger.error('Connection refused from {}'.format(response.url))
             sys.exit(1)
+        self.logger.info('Latest block info: {}'.format(response.text))
         data = response.json()
 
         return data
@@ -39,6 +48,7 @@ class BitcoinNodeSyncChecker(object):
     def node_blocks_count(self):
         try:
             blocks_count = self.bitcoin_node.node_connection.getblockcount()
+            self.logger.info('Node blocks count: {}'.format(blocks_count))
             return blocks_count
         except ConnectionError:
             self.logger.error('Connection refused from bitcoin node')
@@ -46,7 +56,9 @@ class BitcoinNodeSyncChecker(object):
 
     @property
     def delta_origin_and_node_blocks(self):
-        return int(self.latest_block_blocks_count) - int(self.node_blocks_count)
+        blocks_delta = int(self.latest_block_blocks_count) - int(self.node_blocks_count)
+        self.logger.info('Blocks delta: {}'.format(blocks_delta))
+        return blocks_delta
 
     def save_check_result(self):
         json_data = [

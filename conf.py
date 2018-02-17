@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 
-logger = logging.getLogger('conf_logger')
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
@@ -10,7 +10,7 @@ def get_env_variable(key):
     try:
         return os.environ[key]
     except KeyError as e:
-        logger.error('No environment variable "{}"'.format(e))
+        logger.error('No environment variable {}'.format(e))
         sys.exit(1)
 
 
