@@ -1,6 +1,5 @@
 import logging
 import os
-
 import sys
 
 logger = logging.getLogger('conf_logger')

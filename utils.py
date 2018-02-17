@@ -1,9 +1,9 @@
-import ssl
 import http.client as httplib
+import ssl
 import urllib.parse as urlparse
 
+from bitcoinrpc.authproxy import HTTP_TIMEOUT, AuthServiceProxy
 from influxdb import InfluxDBClient
-from bitcoinrpc.authproxy import AuthServiceProxy, HTTP_TIMEOUT
 
 from conf import Config
 
@@ -36,12 +36,11 @@ class BitcoinNode(object):
         return context
 
     def _get_connection(self):
+        connection = None
         if not self._check_ssl and self.host.scheme == 'https':
             context = self._get_no_ssl_connection_context()
             connection = httplib.HTTPSConnection(self.host.hostname, self._port,
                                                  timeout=HTTP_TIMEOUT, context=context)
-        else:
-            connection = None
         return connection
 
     def get_node_connection(self):

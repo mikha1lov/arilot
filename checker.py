@@ -1,11 +1,12 @@
-import sys
 import logging
-import requests
+import sys
 import time
 from datetime import datetime
 
+import requests
+
 from conf import Config
-from utils import DatabaseConnection, BitcoinNode
+from utils import BitcoinNode, DatabaseConnection
 
 
 class BitcoinNodeSyncChecker(object):
