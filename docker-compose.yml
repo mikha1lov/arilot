@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+  arilot:
+    build: .
+    command: python checker.py
+    env_file: .env
