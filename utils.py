@@ -15,7 +15,7 @@ class BitcoinNode(object):
         self._port = Config.RPC_PORT
         self._username = Config.RPC_USER
         self._password = Config.RPC_PASSWORD
-        self._check_ssl = Config.CHECK_SSL
+        self._check_ssl = Config.RPC_CHECK_SSL
 
         self.host = urlparse.urlparse(self._base_host)
 

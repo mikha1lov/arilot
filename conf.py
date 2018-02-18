@@ -28,4 +28,4 @@ class Config:
 
     CALL_TIMEOUT = int(get_env_variable('CALL_TIMEOUT'))
 
-    CHECK_SSL = os.environ.get('CHECK_SSL', '') == 'TRUE'
+    RPC_CHECK_SSL = os.environ.get('RPC_CHECK_SSL', '') == 'TRUE'
